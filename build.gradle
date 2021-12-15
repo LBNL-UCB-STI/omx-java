@@ -1,0 +1,57 @@
+group = 'omx'
+version = '2.0.0'
+
+apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile files("libs/fits.jar")
+    compile files("libs/jhdf.jar")
+    compile files("libs/jhdf4obj.jar")
+    compile files("libs/jhdf5.jar")
+    compile files("libs/jhdf5obj.jar")
+    compile files("libs/jhdfobj.jar")
+    compile files("libs/netcdf.jar")
+    compile files("libs/ext/fitsobj.jar")
+    compile files("libs/ext/nc2obj.jar")
+}
+
+jar {
+    baseName = 'omx'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }
+}
