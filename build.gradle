@@ -1,5 +1,5 @@
-group = 'omx'
-version = '2.0.0'
+group = 'com.github.LBNL-UCB-STI'
+version = 'v2.0.0'
 
 apply plugin: 'maven'
 apply plugin: 'java'
@@ -24,6 +24,10 @@ jar {
     baseName = 'omx'
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version)
     }
 }
 

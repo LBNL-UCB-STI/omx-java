@@ -460,8 +460,9 @@ public class OmxFile extends AttributedElement implements AutoCloseable {
     }
 
 
-    public static void main(String ... args) {
-        
+    public static void main(String ... args) throws IOException {
+        HDF5Loader.prepareHdf5Library();
+
     	Random r = new Random();
         String f = "example.omx";
         try (OmxFile omxFile = new OmxFile(f)) {

@@ -5,50 +5,30 @@ Java API for [OMX](https://github.com/osPlanning/omx)
 There are two examples:
 
 ```
-java.exe -classpath omx.jar -Djava.library.path=./lib/win64/ omx.OMXTest
+java -classpath build/libs/omx-2.0.0.jar omx.OMXTest
 
-java.exe -classpath omx.jar -Djava.library.path=./lib/win64/ omx.OMXFile
+java -classpath build/libs/omx-2.0.0.jar omx.OMXFile
 ```
 
-# Required binaries for using the jar
+# Jar packaging
 
-The binary libraries in /lib/ are required to run the model, and must be present on the java
- library path. For example, on a 64-bit window platform:
+HDF5 java and native libraries are packed with omx.jar. If your platform is not presented in `resources/hdf5-binaries`
+you need to put there the appropriate library and modify `HDF5Loader` class.
 
-    java -classpath omx.jar -Djava.library.path=./lib/win64/ omx.OmxFile
-
-# Required HDF5 libraries for building the jar
-
-To build with the included omx.aml ant script, you need 
-the [HD5 2.8](http://www.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/HDF-JAVA-2.8/bin/) libraries.
-
-# Maven
-
-A maven release is hosted by the [Professorship for Modeling Spatial Mobility](https://www.bgu.tum.de/en/msm/start-page/) at TU Munich. You can access it by defining the following repository in your .pom:
+Before you start working with OMX you need to call
 ```
-<repositories>
-  <repository>
-    <id>msmobility-msm</id>
-    <url>https://dl.cloudsmith.io/public/msmobility/msm/maven/</url>
-    <releases>
-      <enabled>true</enabled>
-      <updatePolicy>always</updatePolicy>
-    </releases>
-    <snapshots>
-      <enabled>true</enabled>
-      <updatePolicy>always</updatePolicy>
-    </snapshots>
-  </repository>
-</repositories>
+HDF5Loader.prepareHdf5Library();
 ```
-In the dependencies section of your .pom file add:
-```
-<dependency>
-  <groupId>omx</groupId>
-  <artifactId>omx</artifactId>
-  <version>2</version>
-</dependency>
-```
+It stores an appropriate native library to your `temp` directory and allows HDF5 library to load it.
 
-Please note that this does not include the native hdf5 libraries that you will need to setup independently. They can be found in the release/lib folder of this repository.
+## HDF5 libraries that was used
+
+[HD5 2.8](http://www.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/HDF-JAVA-2.8/bin/) libraries.
+
+# Maven coordinates
+
+```
+com.github.LBNL-UCB-STI:omx-java:version
+```
+where version is the latest release tag (i.e. `v2.0.0`)
 
