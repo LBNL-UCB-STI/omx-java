@@ -1,5 +1,5 @@
 group = 'com.github.LBNL-UCB-STI'
-version = 'v2.0.0'
+version = 'v2.0.1'
 
 apply plugin: 'maven'
 apply plugin: 'java'
@@ -7,6 +7,10 @@ apply plugin: 'idea'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
 
 dependencies {
     compile files("libs/fits.jar")
@@ -18,12 +22,14 @@ dependencies {
     compile files("libs/netcdf.jar")
     compile files("libs/ext/fitsobj.jar")
     compile files("libs/ext/nc2obj.jar")
+    runtime "org.slf4j:slf4j-api:1.7.25"
 }
 
 jar {
     baseName = 'omx'
     from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath
+                .collect { it.isDirectory() ? it : zipTree(it).matching{exclude{it.path.contains('org/slf4j')}} }
     }
     manifest {
         attributes('Implementation-Title': project.name,

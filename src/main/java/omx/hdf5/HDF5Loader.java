@@ -3,7 +3,6 @@ package omx.hdf5;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Objects;
 
 public class HDF5Loader {
@@ -13,9 +12,12 @@ public class HDF5Loader {
     private static final String linux64 = "linux64/libjhdf5.so";
     private static final String windows32 = "win32/jhdf5.dll";
     private static final String windows64 = "win64/jhdf5.dll";
+    public static final String HDF5_LIB_PATH_PROPERTY = "ncsa.hdf.hdf5lib.H5.hdf5lib";
 
     public static void prepareHdf5Library() throws IOException {
-
+        if (System.getProperty(HDF5_LIB_PATH_PROPERTY) != null) {
+            return;
+        }
         Path tempDir = Files.createTempDirectory("hdf5");
         tempDir.toFile().deleteOnExit();
 
@@ -26,7 +28,7 @@ public class HDF5Loader {
         Files.copy(Objects.requireNonNull(HDF5Loader.class.getResourceAsStream(resource)), libraryPath);
         libraryPath.toFile().deleteOnExit();
 
-        System.setProperty("ncsa.hdf.hdf5lib.H5.hdf5lib", libraryPath.toString());
+        System.setProperty(HDF5_LIB_PATH_PROPERTY, libraryPath.toString());
     }
 
     private static String getLastFileName(String libraryFileName) {
