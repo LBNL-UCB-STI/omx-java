@@ -51,11 +51,13 @@ public class HDF5Loader {
                 return windows32;
         }
 
-        if (os.contains("mac"))
-            if (System.getProperty("os.arch").contains("aarch64"))
+        if (os.contains("mac")) {
+            String arch = System.getProperty("os.arch");
+            if (arch.contains("aarch64") || arch.endsWith("_64"))
                 return macos64;
             else
                 return macos32;
+        }
 
         if (os.contains("nix") || os.contains("nux"))
             if (System.getProperty("os.arch").endsWith("64"))
